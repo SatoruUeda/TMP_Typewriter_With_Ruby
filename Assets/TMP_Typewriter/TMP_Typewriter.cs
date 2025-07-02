@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 
@@ -103,7 +104,9 @@ namespace KoganeUnityLib
 					var ruby = match.Groups["ruby"];
 					var kanji = match.Groups["kanji"];
 					m_rubyInfos.Add((ruby.Index + kanji.Value.Length - 3, ruby.Value.Length));
-					text = text.Replace(match.Groups[0].Value, kanji.Value);
+					var patternToFind = Regex.Escape(match.Groups[0].Value);
+					var regex = new Regex(patternToFind);
+					text = regex.Replace(text, kanji.Value, 1);
 					match = TMProRubyUtil.TagRegex.Match(text);
 				}
 				else
@@ -178,7 +181,7 @@ namespace KoganeUnityLib
 			}
 
 			m_textUI.maxVisibleCharacters = rubyAddedCount;
-			
+
 			Debug.Log(value);
 		}
 
